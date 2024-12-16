@@ -1,0 +1,96 @@
+Case Study: Analyzing Weather Data with NumPy
+(Mendatory for all questions)
+import numpy as np
+import pandas as pd
+temperature_data = pd.read_csv('KOL.csv').values
+temperature_data = temperature_data[:365, 4].tolist()
+temp_array = np.array(temperature_data)
+print(temp_array.shape)
+
+1.
+mean_temp = np.mean(temp_array)
+median_temp = np.median(temp_array)
+min_temp = np.min(temp_array)
+max_temp = np.max(temp_array)
+print(f"Mean Temperature: {mean_temp}°C")
+print(f"Median Temperature: {median_temp}°C")
+print(f"Minimum Temperature: {min_temp}°C")
+print(f"Maximum Temperature: {max_temp}°C")
+
+
+2.
+day_of_max_temp = np.argmax(temp_array)
+print(f"The highest temperature occurred on day: {day_of_max_temp}")
+
+std_dev = np.std(temp_array)
+print(f"Standard Deviation of Temperatures: {std_dev}°C")
+
+
+3.Case Study: E-commerce Customer Behavior Analysis
+
+data = {
+    'CustomerID': [101, 102, 103, 104, 105],
+    'Age': [25, 30, 22, 29, 'N/A'],
+    'Gender': ['Male', 'Female', 'Female', 'Male', 'N/A'],
+    'PurchaseAmount': [100, 150, 90, 120, 110],
+    'ProductCategory': ['Electronics', 'Clothing', 'Clothing', 'Electronics', 'Home']
+}
+df = pd.DataFrame(data)
+df.head()
+
+
+df.isnull().sum()
+
+
+descriptive_stats = df['PurchaseAmount'].describe()
+print(descriptive_stats)
+
+
+4.Assignment: Sentiment Analysis of Product Reviews using
+Naive Bayes
+
+
+np.random.seed(42)
+reviews = ["Great product", "Did not like it", "Works as expected", "Terrible experience", "Will buy again", "Disappointed"]
+sentiments = [1, 0, 1, 0, 1, 0]
+data = {
+    'ReviewText': np.random.choice(reviews, 100),
+    'Sentiment': np.random.choice(sentiments, 100)
+}
+df = pd.DataFrame(data)
+print(df['Sentiment'].value_counts())
+print(df.sample(5))
+
+
+
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import train_test_split
+ 
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(df['ReviewText'])
+y = df['Sentiment']
+ 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, f1_score
+ 
+# Train Naive Bayes classifier
+nb = MultinomialNB()
+nb.fit(X_train, y_train)
+ 
+# Predict sentiments
+y_pred = nb.predict(X_test)
+ 
+# Evaluate model
+accuracy = accuracy_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+ 
+print(f"Accuracy: {accuracy * 100:.2f}%")
+print(f"F1 Score: {f1:.2f}")
+
+
+incorrect_indices = y_test[y_pred != y_test].index
+incorrect_predictions = df.iloc[incorrect_indices]
+print(incorrect_predictions)
+
